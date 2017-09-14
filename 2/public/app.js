@@ -8,7 +8,7 @@ learnjs.problemView = function() {
 
 learnjs.showView = function(hash) {
   var routes = {
-    '#problem-view': learnjs.problemView
+    '#problem-1': learnjs.problemView
   };
   var viewFn = routes[hash];
   if (viewFn) {
