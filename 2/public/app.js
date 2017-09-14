@@ -2,8 +2,9 @@
 // 名前空間の定義
 var learnjs = {};
 
-learnjs.problemView = function() {
-  return $('<div class="problem-view">').text('Comming soon!');
+learnjs.problemView = function(problemNumber) {
+  var title = 'Problem #' + problemNumber + 'Comming soon!';
+  return $('<div class="problem-view">').text(title);
 }
 
 learnjs.showView = function(hash) {
