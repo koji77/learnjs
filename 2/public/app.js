@@ -2,7 +2,7 @@
 // 名前空間の定義
 var learnjs = {};
 
-learing.problemView = function() {
+learnjs.problemView = function() {
   return $('<div class="problem-view">').text('Comming soon!');
 }
 
