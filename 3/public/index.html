@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Learn JS!</title>
+    <!-- Google Fonts経由でSleletonのデフォルトフォントである「Raleway」を組み込む -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <!-- 全てのCSSをリセットする。すべてのブラウザでベースのスタイルを同じにする。 -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css'>
+    <!-- skeleton: Responsive CSS Boilerplate(雛形)、グリットシステム、スタイルなどを提供 -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css'>
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <!-- CDN経由では利用できないライブラリが含まれる。Javascript用のAWS SDKも含まれる。 -->
+    <script src='/vendor.js'></script>
+    <script src='/app.js'></script>
+    <style type="text/css" media="all">
+      body { margin-top: 30px; }
+    </style>
+  </head>
+  <body>
+    <!-- markup要素に含まれるマークアップがテストライナーのページのbodyに自動的に追加される。(SpecHelper.js) -->
+    <div class='markup'>
+      <!-- Viewのマークアップを保持する要素 -->
+      <!-- SPAではルータが新しいViewを追加すると、View Countainer内のマークアップを全て置き換える。 -->
+      <div class='container view-container'>
+        <!-- 本アプリケーションでは、「landing-view」がデフォルトのView -->
+        <div class='landing-view'>
+          <div class='row'>
+            <div class='one-half column'>
+              <h3>Learn Javascript, one puzzle at a time</h3>
+              <a href='#problem-1' class='button button-primary'>Start Now!</a>
+            </div>
+            <div class='one-half column'>
+              <img src='/images/HeroImage.jpg'/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // $.ready(): ページが準備完了後に実施する処理を記述
+      $(window).ready(learnjs.appOnReady);
+    </script>
+  </body>
+</html>
