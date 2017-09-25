@@ -142,7 +142,6 @@ learnjs.awsRefresh = function() {
       console.log(err);
     } else {
       deferred.resolve(AWS.config.credentials.identityId);
-      console.log('fugo');
     }
   });
   return deferred.promise();
