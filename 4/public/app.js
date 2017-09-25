@@ -163,7 +163,7 @@ function googleSignIn(googleUser) {
   });
   // 期限切れの場合にアイデンティティトークンを更新してAWSの認証情報を更新する。
   function refresh() {
-    return gapi.auth2.getAuthInstance().signin({
+    return gapi.auth2.getAuthInstance().signIn({
       prompt: 'login'
     }).then(function(userUpdate) {
       var creds = AWS.cofing.credentials;
