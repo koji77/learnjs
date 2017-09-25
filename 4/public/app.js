@@ -1,7 +1,7 @@
 'use strict';
 // 名前空間の定義
 var learnjs = {
-  poolId: '54fd1dbc-e565-463b-840c-e9627fa377f9'
+  poolId: 'ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9'
 };
 
 learnjs.problems = [
