@@ -139,8 +139,10 @@ learnjs.awsRefresh = function() {
   AWS.config.credentials.refresh(function(err) {
     if (err) {
       deferred.reject(err);
+      console.log(err);
     } else {
       deferred.resolve(AWS.config.credentials.identityId);
+      console.log('fugo');
     }
   });
   return deferred.promise();
