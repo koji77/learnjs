@@ -4,6 +4,8 @@ var learnjs = {
   poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
 };
 
+learnjs.identity = new $.Deferred();
+
 learnjs.problems = [
   {
     description: "What is truth ?",
@@ -138,6 +140,7 @@ learnjs.awsRefresh = function() {
   var deferred = new $.Deferred();
   AWS.config.credentials.refresh(function(err) {
     if (err) {
+      console.log(err);
       deferred.reject(err);
     } else {
       deferred.resolve(AWS.config.credentials.identityId);
@@ -146,33 +149,30 @@ learnjs.awsRefresh = function() {
   return deferred.promise();
 }
 
-learnjs.identity = new $.Deferred();
-
 // Google+ へのログイン特定の名前空間に配置することができない。
 function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
-    resigon: 'us-east-1',
+    region: 'us-east-1',
     credentials: new AWS.CognitoIdentityCredentials({
       IdentityPoolId: learnjs.poolId,
       Logins: {
         'accounts.google.com': id_token
       }
     })
-  });
+  })
   // 期限切れの場合にアイデンティティトークンを更新してAWSの認証情報を更新する。
   function refresh() {
     return gapi.auth2.getAuthInstance().signIn({
-      prompt: 'login'
-    }).then(function(userUpdate) {
-      var creds = AWS.cofing.credentials;
+        prompt: 'login'
+      }).then(function(userUpdate) {
+      var creds = AWS.config.credentials;
       var newToken = userUpdate.getAuthResponse().id_token;
       creds.params.Logins['accounts.google.com'] = newToken;
       return learnjs.awsRefresh();
     });
   }
-  //
   learnjs.awsRefresh().then(function(id) {
     learnjs.identity.resolve({
       id: id,
