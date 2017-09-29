@@ -1,7 +1,7 @@
 'use strict';
 // 名前空間の定義
 var learnjs = {
-  poolId: 'ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9'
+  poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
 };
 
 learnjs.problems = [
@@ -139,7 +139,6 @@ learnjs.awsRefresh = function() {
   AWS.config.credentials.refresh(function(err) {
     if (err) {
       deferred.reject(err);
-      console.log(err);
     } else {
       deferred.resolve(AWS.config.credentials.identityId);
     }
@@ -154,7 +153,7 @@ function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
-    resigon: 'ap-northeast-1',
+    resigon: 'us-east-1',
     credentials: new AWS.CognitoIdentityCredentials({
       IdentityPoolId: learnjs.poolId,
       Logins: {

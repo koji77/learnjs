@@ -1,5 +1,4 @@
 # Serverless Siglepage Application
-
 ## Boilerplate(雛形)入手
 ```
 git clone https://github.com/benrady/learnjs.git
