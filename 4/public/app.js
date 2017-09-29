@@ -1,6 +1,7 @@
 'use strict';
 // 名前空間の定義
 var learnjs = {
+  // vendor.jsはリージョンがus-east-1でないと動作しない
   poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
 };
 
@@ -140,7 +141,6 @@ learnjs.awsRefresh = function() {
   var deferred = new $.Deferred();
   AWS.config.credentials.refresh(function(err) {
     if (err) {
-      console.log(err);
       deferred.reject(err);
     } else {
       deferred.resolve(AWS.config.credentials.identityId);
@@ -152,6 +152,7 @@ learnjs.awsRefresh = function() {
 // Google+ へのログイン特定の名前空間に配置することができない。
 function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
+  // vendor.jsはリージョンがus-east-1でないと動作しない
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
     region: 'us-east-1',
