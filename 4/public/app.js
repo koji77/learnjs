@@ -5,6 +5,44 @@ var learnjs = {
   poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
 };
 
+/*
+jQuery.Deferredによる並列処理の直列化
+1. new $.Deferred() で Deferred のオブジェクトを生成
+2. 非同期処理が完了した時点で、生成したDeferredオブジェクトのresolve()メソッドを実行
+3. Defferedオブジェクトのpromise()メソッドを実行
+4. promise()メソッドの戻り値(promise オブジェクト)のthen()メソッドに非同期処理の後に実行したい処理を渡す。
+
+```
+var d = new $.Deferred();
+
+async(function() {
+    console.log('async');
+    // 非同期処理が完了した時点で、生成したDeferredオブジェクトのresolve()メソッドを実行
+    d.resolve();
+});
+
+d.promise()
+.then(function() {
+    console.log('hoge');
+})
+.then(function() {
+    // 非同期処理の後に実行したい処理
+    console.log('fuga');
+});
+
+// 指定した関数を 1 秒後に実行
+function async(f) {
+    setTimeout(f, 1000);
+}
+```
+
+Promiseオブジェクト
+オブジェクトの状態を返す(.state) => (pending: 処理が未完了 / resolved: 処理が成功 / rejected: 処理が失敗)
+状態がresolvedになった時に実行されるコールバック(.done)、resolve()の引数がdeferred.doneメソッドで設定したfunctionの引数となる。
+状態がrejectedになった時に実行されるコールバック(.fail)、rejected()の引数がdeferred.failメソッドで設定したfunctionの引数となる。
+
+*/
+
 learnjs.identity = new $.Deferred();
 
 learnjs.problems = [
