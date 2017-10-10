@@ -104,6 +104,7 @@ learnjs.problemView = function(data) {
     var test = problemData.code.replace('__', answer) + '; problem();';
     return eval(test);
   }
+
   // クリックハンドラ
   function checkAnswerClick() {
     if(checkAnswer()) {
@@ -214,7 +215,7 @@ learnjs.saveAnswer = function(problemId, answer) {
   return learnjs.identity.then(function(identity) {
     var db = new AWS.DynamoDB.DocumentClient();
     var item = {
-      TableName = 'learnjs',
+      TableName: 'learnjs',
       Item: {
         userId: identity.id,
         problemId: problemId,
