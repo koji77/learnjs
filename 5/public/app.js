@@ -201,8 +201,8 @@ learnjs.awsRefresh = function() {
 learnjs.sendDbRequest = function(req, retry) {
   var promise = new $.Deferred();
   console.log('1111');
+  console.log(req);
   req.on('error', function(error) {
-    console.log('2222');
     if(error.code === "CredentialsError") {
       learnjs.identity.then(function(identity) {
         return identity.refresh().then(function() {
