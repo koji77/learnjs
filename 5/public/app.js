@@ -202,23 +202,31 @@ learnjs.awsRefresh = function() {
 }
 
 learnjs.sendDbRequest = function(req, retry) {
+  console.log('1111');
   var promise = new $.Deferred();
   req.on('error', function(error) {
+    console.log('2222');
     if(error.code === "CredentialsError") {
+      console.log('3333');
       learnjs.identity.then(function(identity) {
+        console.log('4444');
         return identity.refresh().then(function() {
           return retry();
         }, function() {
+          console.log('5555');
           promise.reject(resp);
         });
       });
     } else {
+      console.log('6666');
       promise.reject(error);
     }
   });
   req.on('success', function(resp) {
+    console.log('7777');
     promise.resolve(resp.data);
   });
+  console.log('8888');
   req.send();
   return promise;
 }
@@ -241,9 +249,7 @@ learnjs.saveAnswer = function(problemId, answer) {
 }
 
 learnjs.fetchAnswer = function(problemId) {
-  console.log('1111');
   return learnjs.identity.then(function(identity) {
-    console.log('2222');
     var db = new AWS.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
     var item = {
       TableName: 'learnjs',
@@ -252,9 +258,7 @@ learnjs.fetchAnswer = function(problemId) {
         problemId: problemId
       }
     };
-    console.log('3333');
     return learnjs.sendDbRequest(db.get(item), function() {
-      console.log('4444');
       return learnjs.fetchAnswer(problemId);
     });
   });
