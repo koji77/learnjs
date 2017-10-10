@@ -241,7 +241,7 @@ learnjs.fetchAnswer = function(problemId) {
     var db = new AWS.DynamoDB.DocumentClient();
     var item = {
       TableName: 'learnjs',
-      Item: {
+      Key: {
         userId: identity.id,
         problemId: problemId
       }
