@@ -129,9 +129,9 @@ learnjs.problemView = function(data) {
   }
 
   learnjs.fetchAnswer(problemNumber).then(function(data) {
-    console.log(hoge!!);
+    console.log('hoge!!');
     if(data.Item) {
-      console.log(fugo!!);
+      console.log('fugo!!');
       answer.val(data.Item.answer);
     }
   });
