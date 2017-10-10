@@ -108,6 +108,7 @@ learnjs.problemView = function(data) {
   function checkAnswerClick() {
     if(checkAnswer()) {
       learnjs.flashElement(resultFlash, learnjs.buildCorrectFlash(problemNumber));
+      learnjs.saveAnswer(problemNumber, answer.val());
     } else {
       learnjs.flashElement(resultFlash, 'Incorrect!');
     }
@@ -187,7 +188,46 @@ learnjs.awsRefresh = function() {
   return deferred.promise();
 }
 
-// Google+ へのログイン特定の名前空間に配置することができない。
+learnjs.sendDbRequest = function(req, retry) {
+  var promise = new $Deferred();
+  req.on('error', function(error) {
+    if(error.code === "CredentialsError") {
+      learnjs.identity.then(function(identity) {
+        return identity.refresh().then(function() {
+          return retry();
+        }, function() {
+          promise.reject(resp);
+        });
+      });
+    } else {
+      promise.reject(error);
+    }
+  });
+  req.on('success', function(resp) {
+    promise.resolve(resp.data);
+  });
+  req.send();
+  return promise;
+}
+
+learnjs.saveAnswer = function(problemId, answer) {
+  return learnjs.identity.then(function(identity) {
+    var db = new AWS.DynamoDB.DocumentClient();
+    var item = {
+      TableName = 'learnjs',
+      Item: {
+        userId: identity.id,
+        problemId: problemId,
+        answer: answer
+      }
+    };
+    return learnjs.sendDbRequest(db.put(item), function() {
+      return learnjs.saveAnswer(problemId, answer);
+    });
+  });
+}
+
+// Google+ へのログインでは特定の名前空間に配置することができない。
 function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
   // vendor.jsはリージョンがus-east-1でないと動作しない
