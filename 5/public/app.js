@@ -202,7 +202,6 @@ learnjs.awsRefresh = function() {
 }
 
 learnjs.sendDbRequest = function(req, retry) {
-  console.log(req);
   var promise = new $.Deferred();
   req.on('error', function(error) {
     console.log('2222');
