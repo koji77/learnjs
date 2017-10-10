@@ -211,6 +211,9 @@ learnjs.sendDbRequest = function(req, retry) {
           promise.reject(resp);
         });
       });
+    } else if(error.code === "AccessDeniedException") {
+      console.log('AWS IAM Role Authentication Error');
+      promise.reject(error);
     } else {
       console.log('3333');
       promise.reject(error);
