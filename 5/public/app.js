@@ -117,6 +117,7 @@ learnjs.problemView = function(data) {
     // falseを返すとサーバにフォームが送信されない。
     return false;
   }
+
   if (problemNumber < learnjs.problems.length) {
     var buttonItem = learnjs.template('skip-btn');
     buttonItem.find('a').attr('href', '#problem-' + (problemNumber + 1));
@@ -128,7 +129,9 @@ learnjs.problemView = function(data) {
   }
 
   learnjs.fetchAnswer(problemNumber).then(function(data) {
+    console.log(hoge!!);
     if(data.Item) {
+      console.log(fugo!!);
       answer.val(data.Item.answer);
     }
   });
