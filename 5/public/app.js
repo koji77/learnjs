@@ -200,8 +200,6 @@ learnjs.awsRefresh = function() {
 
 learnjs.sendDbRequest = function(req, retry) {
   var promise = new $.Deferred();
-  console.log('1111');
-  console.log(req);
   req.on('error', function(error) {
     if(error.code === "CredentialsError") {
       learnjs.identity.then(function(identity) {
@@ -215,14 +213,15 @@ learnjs.sendDbRequest = function(req, retry) {
       console.log('AWS IAM Role Authentication Error');
       promise.reject(error);
     } else {
-      console.log('3333');
       promise.reject(error);
     }
   });
   req.on('success', function(resp) {
     promise.resolve(resp.data);
   });
-  console.log('4444');
+  req.on('complete', function(resp) {
+    console.log(resp);
+  })
   req.send();
   return promise;
 }
