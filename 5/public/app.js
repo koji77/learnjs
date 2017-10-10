@@ -127,7 +127,7 @@ learnjs.problemView = function(data) {
       buttonItem.remove();
     });
   }
-  
+
   learnjs.fetchAnswer(problemNumber).then(function(data) {
     if(data.Item) {
       answer.val(data.Item.answer);
@@ -200,7 +200,9 @@ learnjs.awsRefresh = function() {
 
 learnjs.sendDbRequest = function(req, retry) {
   var promise = new $.Deferred();
+  console.log('1111');
   req.on('error', function(error) {
+    console.log('2222');
     if(error.code === "CredentialsError") {
       learnjs.identity.then(function(identity) {
         return identity.refresh().then(function() {
@@ -209,18 +211,18 @@ learnjs.sendDbRequest = function(req, retry) {
           promise.reject(resp);
         });
       });
-    } else if(error.code === "CredentialsError") {
+    } else if(error.code === "AuthenticationError") {
       console.log('AWS IAM Role Authentication Error');
       promise.reject(error);
     } else {
+      console.log('3333');
       promise.reject(error);
     }
   });
   req.on('success', function(resp) {
     promise.resolve(resp.data);
   });
-  req.on('complete', function(resp) {
-  })
+  console.log('4444');
   req.send();
   return promise;
 }
