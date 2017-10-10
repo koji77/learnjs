@@ -128,10 +128,11 @@ learnjs.problemView = function(data) {
     });
   }
 
+  console.log('hoge!!');
   learnjs.fetchAnswer(problemNumber).then(function(data) {
-    console.log('hoge!!');
+    console.log('fugo!!');
     if(data.Item) {
-      console.log('fugo!!');
+      console.log('geho!!');
       answer.val(data.Item.answer);
     }
   });
@@ -224,7 +225,7 @@ learnjs.sendDbRequest = function(req, retry) {
 
 learnjs.saveAnswer = function(problemId, answer) {
   return learnjs.identity.then(function(identity) {
-    var db = new AWS.DynamoDB.DocumentClient();
+    var db = new AWS.DynamoDB.DocumentClient({region: ap-northeast-1});
     var item = {
       TableName: 'learnjs',
       Item: {
@@ -241,7 +242,7 @@ learnjs.saveAnswer = function(problemId, answer) {
 
 learnjs.fetchAnswer = function(problemId) {
   return learnjs.identity.then(function(identity) {
-    var db = new AWS.DynamoDB.DocumentClient();
+    var db = new AWS.DynamoDB.DocumentClient({region: ap-northeast-1});
     var item = {
       TableName: 'learnjs',
       Key: {
