@@ -127,12 +127,9 @@ learnjs.problemView = function(data) {
       buttonItem.remove();
     });
   }
-
-  console.log('hoge!!');
+  
   learnjs.fetchAnswer(problemNumber).then(function(data) {
-    console.log('fugo!!');
     if(data.Item) {
-      console.log('geho!!');
       answer.val(data.Item.answer);
     }
   });
@@ -204,31 +201,26 @@ learnjs.awsRefresh = function() {
 learnjs.sendDbRequest = function(req, retry) {
   var promise = new $.Deferred();
   req.on('error', function(error) {
-    console.log('2222');
     if(error.code === "CredentialsError") {
-      console.log('3333');
       learnjs.identity.then(function(identity) {
-        console.log('4444');
         return identity.refresh().then(function() {
           return retry();
         }, function() {
-          console.log('5555');
           promise.reject(resp);
         });
       });
+    } else if(error.code === "CredentialsError") {
+      console.log('AWS IAM Role Authentication Error');
+      promise.reject(error);
     } else {
-      console.log('6666');
       promise.reject(error);
     }
   });
   req.on('success', function(resp) {
-    console.log('7777');
     promise.resolve(resp.data);
   });
   req.on('complete', function(resp) {
-    console.log(resp);
   })
-  console.log('8888');
   req.send();
   return promise;
 }
