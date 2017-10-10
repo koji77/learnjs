@@ -97,6 +97,7 @@ learnjs.problemView = function(data) {
   var view = learnjs.template('problem-view');
   var problemData = learnjs.problems[problemNumber - 1];
   var resultFlash = view.find('.result');
+  var answer = view.find('.answer');  // 教科書になかったが必要
 
   function checkAnswer() {
     var answer = view.find('.answer').val();
