@@ -225,7 +225,7 @@ learnjs.sendDbRequest = function(req, retry) {
 
 learnjs.saveAnswer = function(problemId, answer) {
   return learnjs.identity.then(function(identity) {
-    var db = new AWS.DynamoDB.DocumentClient({region: ap-northeast-1});
+    var db = new AWS.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
     var item = {
       TableName: 'learnjs',
       Item: {
@@ -242,7 +242,7 @@ learnjs.saveAnswer = function(problemId, answer) {
 
 learnjs.fetchAnswer = function(problemId) {
   return learnjs.identity.then(function(identity) {
-    var db = new AWS.DynamoDB.DocumentClient({region: ap-northeast-1});
+    var db = new AWS.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
     var item = {
       TableName: 'learnjs',
       Key: {
