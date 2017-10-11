@@ -266,7 +266,7 @@ function googleSignIn(googleUser) {
   // vendor.jsはリージョンがus-east-1でないと動作しない
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
-    region: 'us-east-1',
+    region: 'ap-northeast-1',
     credentials: new AWS.CognitoIdentityCredentials({
       region: 'ap-northeast-1',
       IdentityPoolId: learnjs.poolId,
