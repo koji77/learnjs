@@ -1,7 +1,6 @@
 'use strict';
 // 名前空間の定義
 var learnjs = {
-  // vendor.jsはリージョンがus-east-1でないと動作しない
   // poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
   poolId: 'ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9'
 };
@@ -220,9 +219,11 @@ learnjs.sendDbRequest = function(req, retry) {
   req.on('success', function(resp) {
     promise.resolve(resp.data);
   });
+  /*
   req.on('complete', function(resp) {
     console.log(resp);
   })
+  */
   req.send();
   return promise;
 }
@@ -263,12 +264,11 @@ learnjs.fetchAnswer = function(problemId) {
 // Google+ へのログインでは特定の名前空間に配置することができない。
 function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
-  // vendor.jsはリージョンがus-east-1でないと動作しない
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
     region: 'ap-northeast-1',
     credentials: new AWS.CognitoIdentityCredentials({
-      region: 'ap-northeast-1',
+      region: 'ap-northeast-1',  // デフォルトはus-east-1なので明示的に追加
       IdentityPoolId: learnjs.poolId,
       Logins: {
         'accounts.google.com': id_token
