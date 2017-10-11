@@ -219,11 +219,9 @@ learnjs.sendDbRequest = function(req, retry) {
   req.on('success', function(resp) {
     promise.resolve(resp.data);
   });
-  /*
   req.on('complete', function(resp) {
     console.log(resp);
   })
-  */
   req.send();
   return promise;
 }
