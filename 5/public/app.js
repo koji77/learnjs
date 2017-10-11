@@ -2,7 +2,8 @@
 // 名前空間の定義
 var learnjs = {
   // vendor.jsはリージョンがus-east-1でないと動作しない
-  poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
+  // poolId: 'us-east-1:e5ee7425-b8cd-4c9b-9cfe-fcc223610529'
+  poolId: 'ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9'
 };
 
 /*
@@ -267,6 +268,7 @@ function googleSignIn(googleUser) {
   AWS.config.update({
     region: 'us-east-1',
     credentials: new AWS.CognitoIdentityCredentials({
+      region: 'ap-northeast-1',
       IdentityPoolId: learnjs.poolId,
       Logins: {
         'accounts.google.com': id_token
