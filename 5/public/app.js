@@ -138,10 +138,7 @@ learnjs.problemView = function(data) {
   view.find('.check-btn').click(checkAnswerClick);
   // 回答数を取得
   var answerNum = 0;
-  console.log('aaaa');
   learnjs.countAnswers(problemNumber).then(function(data) {
-    console.log('bbbb');
-    console.log(data);
     if(data.Item) {
       answerNum = answer.val(data.Item);
     }
@@ -273,7 +270,9 @@ learnjs.fetchAnswer = function(problemId) {
 }
 
 learnjs.countAnswers = function(problemId) {
+  console.log('1111');
   return learnjs.identity.then(function(identity) {
+    console.log('2222');
     var db = new AWS.DynamoDB.DocumentClient();
     var params = {
       TableName: 'learnjs',
@@ -282,6 +281,7 @@ learnjs.countAnswers = function(problemId) {
       ExpressAttributeValues: { ':problemId': problemId }
     };
     return learnjs.sendDbRequest(db.scan(params), function() {
+      console.log('3333');
       return learnjs.countAnswers(problemId);
     });
   });
