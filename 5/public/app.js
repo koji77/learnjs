@@ -141,11 +141,11 @@ learnjs.problemView = function(data) {
   learnjs.countAnswers(problemNumber).then(function(data) {
     if(data.Count) {
       answerNum = data.Count;
+      console.log( '(Number of answers: ' + answerNum + ')');
     }
   });
-  console.log(answerNum);
   // titleクラスを持つ要素を取得し、inner textを追加
-  view.find('.title').text('Problem #' + problemNumber + '(Number of answers: ' + answerNum + ')');
+  view.find('.title').text('Problem #' + problemNumber);
   learnjs.applyObject(problemData, view);
   return view;
 }
