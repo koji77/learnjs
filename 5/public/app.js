@@ -278,7 +278,7 @@ learnjs.countAnswers = function(problemId) {
       TableName: 'learnjs',
       Select: 'COUNT',
       FilterExpression: 'problemId = :problemId',
-      ExpressAttributeValues: { ':problemId': problemId }
+      ExpressionAttributeValues: { ':problemId': problemId }
     };
     return learnjs.sendDbRequest(db.scan(params), function() {
       console.log('3333');
