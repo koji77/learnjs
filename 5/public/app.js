@@ -138,8 +138,9 @@ learnjs.problemView = function(data) {
   view.find('.check-btn').click(checkAnswerClick);
   // 回答数を取得
   var answerNum = 0;
+  console.log('aaaa');
   learnjs.countAnswers(problemNumber).then(function(data) {
-    console.log('aaaa');
+    console.log('bbbb');
     console.log(data);
     if(data.Item) {
       answerNum = answer.val(data.Item);
