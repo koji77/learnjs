@@ -225,6 +225,7 @@ learnjs.sendDbRequest = function(req, retry) {
     }
   });
   req.on('success', function(resp) {
+    console.log(resp.data);
     promise.resolve(resp.data);
   });
   /*
@@ -270,18 +271,15 @@ learnjs.fetchAnswer = function(problemId) {
 }
 
 learnjs.countAnswers = function(problemId) {
-  console.log('1111');
   return learnjs.identity.then(function(identity) {
-    console.log('2222');
     var db = new AWS.DynamoDB.DocumentClient();
     var params = {
       TableName: 'learnjs',
       Select: 'COUNT',
       FilterExpression: 'problemId = :problemId',
-      ExpressionAttributeValues: { ':problemId': problemId }
+      ExpressionAttributeValues: {':problemId': problemId}
     };
     return learnjs.sendDbRequest(db.scan(params), function() {
-      console.log('3333');
       return learnjs.countAnswers(problemId);
     });
   });
