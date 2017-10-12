@@ -139,6 +139,7 @@ learnjs.problemView = function(data) {
   // 回答数を取得
   var answerNum = 0;
   learnjs.countAnswers(problemNumber).then(function(data) {
+    console.log(data);
     if(data.Item) {
       answerNum = answer.val(data.Item);
     }
