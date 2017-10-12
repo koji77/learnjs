@@ -141,7 +141,8 @@ learnjs.problemView = function(data) {
   learnjs.countAnswers(problemNumber).then(function(data) {
     if(data.Count) {
       answerNum = data.Count;
-      console.log( '(Number of answers: ' + answerNum + ')');
+      var title = view.find('.title').val() + '(Number of answers: ' + answerNum + ')';
+      view.find('.title').text(title);
     }
   });
   // titleクラスを持つ要素を取得し、inner textを追加
@@ -225,7 +226,6 @@ learnjs.sendDbRequest = function(req, retry) {
     }
   });
   req.on('success', function(resp) {
-    console.log(resp.data);
     promise.resolve(resp.data);
   });
   /*
