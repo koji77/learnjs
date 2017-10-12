@@ -137,7 +137,12 @@ learnjs.problemView = function(data) {
   // クリックイベント待ちにする。
   view.find('.check-btn').click(checkAnswerClick);
   // 回答数を取得
-  var answerNum = learnjs.countAnswers(problemNumber);
+  var answerNum = 0;
+  learnjs.countAnswers(problemNumber).then(function(data) {
+    if(data.Item) {
+      answerNum = answer.val(data.Item);
+    }
+  });
   console.log(answerNum);
   // titleクラスを持つ要素を取得し、inner textを追加
   view.find('.title').text('Problem #' + problemNumber + '(Number of answers: ' + answerNum + ')');
