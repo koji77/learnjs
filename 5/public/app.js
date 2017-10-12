@@ -136,8 +136,10 @@ learnjs.problemView = function(data) {
 
   // クリックイベント待ちにする。
   view.find('.check-btn').click(checkAnswerClick);
+  // 回答数を取得
+  var answerNum = learnjs.countAnswers(problemNumber);
   // titleクラスを持つ要素を取得し、inner textを追加
-  view.find('.title').text('Problem #' + problemNumber);
+  view.find('.title').text('Problem #' + problemNumber + '(Number of answers: ' + answerNum + ')');
   learnjs.applyObject(problemData, view);
   return view;
 }
@@ -257,6 +259,21 @@ learnjs.fetchAnswer = function(problemId) {
     };
     return learnjs.sendDbRequest(db.get(item), function() {
       return learnjs.fetchAnswer(problemId);
+    });
+  });
+}
+
+learnjs.countAnswers = function(problemId) {
+  return learnjs.identity.then(function(identity) {
+    var db = new AWS.DynamoDB.DocumentClient();
+    var params = {
+      TableName: 'learnjs',
+      Select: 'COUNT',
+      FilterExpression: 'problemId = :problemId',
+      ExpressAttributeValues: { ':problemId': problemId }
+    };
+    return learnjs.sendDbRequest(db.scan(params), function() {
+      return learnjs.countAnswers(problemId);
     });
   });
 }
