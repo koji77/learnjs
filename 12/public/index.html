@@ -66,7 +66,11 @@
     <!-- EventEmitterの利用に必要 -->
     <!-- ダウンロード元: https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.1.0/EventEmitter.min.js/ -->
     <script src='./EventEmitter.min.js'></script>
+    <!-- AWS Cognitoを利用した認証基盤のパラメータ -->
+    <script src='./cognito-auth-params.js'></script>
+    <!-- AWS Cognitoを利用した認証基盤 -->
     <script src='./cognito-auth.js'></script>
+    <!-- アプリケーション本体 -->
     <script src='./app.js'></script>
   </head>
   <body>
@@ -137,150 +141,8 @@
           <a> Skip this problem</a>
         </li>
       </div>
-      <!-- ポップアップ置き場 -->
-      <div class='cognito-auth-popups'>
-        <!-- サインアップ画面 -->
-        <div id="cognito-auth-signup-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Sign up</h3>
-            <form>
-              <label for="cognito-auth-signup-name">User name:</label>
-              <input type="text" id="cognito-auth-signup-name" class="cognito-auth-signup-name" size="40em" placeholder="Pick a user name">
-              <label for="cognito-auth-signup-email">E-mail:</label>
-              <input type="text" id="cognito-auth-signup-email" class="cognito-auth-signup-email" size="40em" placeholder="you@example.com">
-              <label for="cognito-auth-signup-passwd">Password:</label>
-              <input type="password" id="cognito-auth-signup-passwd" class="cognito-auth-signup-passwd" size="40em" placeholder="Create a password">
-              <label for="cognito-auth-signup-passwd2">Re-enter the password:</label>
-              <input type="password" id="cognito-auth-signup-passwd2" class="cognito-auth-signup-passwd2" size="40em" placeholder="Re-enter the password">
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-signup-btn'>Sign up</button>
-                <button class='button-primary cognito-auth-signup-reset-btn'>Reset</button>
-                <button class='button-primary cognito-auth-close-btn'>Close</button>
-              </div>
-              <p class='cognito-auth-signup-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- アクテベーション画面 -->
-        <div id="cognito-auth-activation-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Activation</h3>
-            <form>
-              <label for="cognito-auth-activation-key">Activation Key:</label>
-              <input type="text" id="cognito-auth-activation-key" class="cognito-auth-activation-key" size="40em" placeholder="Enter a activation key">
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-activation-btn'>Activate</button>
-              </div>
-              <p class='cognito-auth-activation-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- サインイン画面 -->
-        <div id="cognito-auth-signin-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Sign in</h3>
-            <form>
-              <label for="cognito-auth-signin-name">User name:</label>
-              <input type="text" id="cognito-auth-signin-name" class="cognito-auth-signin-name" size="40em">
-              <label for="cognito-auth-signin-passwd">Password:</label>
-              <input type="password" id="cognito-auth-signin-passwd" class="cognito-auth-signin-passwd" size="40em">
-              <p><a href='#cognito-auth-password-reset-popup' class='cognito-auth-password-reset-open'>Forgot password ?</a></p>
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-signin-btn'>Sign in</button>
-                <button class='button-primary cognito-auth-close-btn'>Close</button>
-              </div>
-              <p class='cognito-auth-signin-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- パスワード更新画面 -->
-        <div id="cognito-auth-password-update-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Password update</h3>
-            <form>
-              <label for="cognito-auth-password-update-current">Current password:</label>
-              <input type="password" id="cognito-auth-password-update-current" class="cognito-auth-password-update-current" size="40em" placeholder="Enter current password">
-              <label for="cognito-auth-password-update-new">New password:</label>
-              <input type="password" id="cognito-auth-password-update-new" class="cognito-auth-password-update-new" size="40em" placeholder="Enter new password">
-              <label for="cognito-auth-password-update-new2">ReEntry new password:</label>
-              <input type="password" id="cognito-auth-password-update-new2" class="cognito-auth-password-update-new2" size="40em" placeholder="ReEnter new password">
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-password-update-reset-btn'>Reset</button>
-                <button class='button-primary cognito-auth-password-update-btn'>Update Password</button>
-              </div>
-              <p class='cognito-auth-password-update-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- パスワードリセット要求画面 -->
-        <div id="cognito-auth-password-reset-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Password reset</h3>
-            <form>
-              <label for="cognito-auth-password-reset-name">User name:</label>
-              <input type="text" id="cognito-auth-password-reset-name" class="cognito-auth-password-reset-name" size="40em">
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-password-reset-btn'>Send Password reset mail</button>
-                <button class='button-primary cognito-auth-close-btn'>Close</button>
-              </div>
-              <p class='cognito-auth-password-reset-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- パスワード忘れ画面 -->
-        <div id="cognito-auth-password-initialize-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
-          <div class="cognito-auth-popup_inner">
-            <h3>Password initialization</h3>
-            <form>
-              <label for="cognito-auth-password-initialize-verification-code">Verification code:</label>
-              <input type="text" id="cognito-auth-password-initialize-verification-code" class="cognito-auth-password-initialize-verification-code" size="40em" placeholder="Enter your verification code">
-              <label for="cognito-auth-password-initialize-new">New password:</label>
-              <input type="password" id="cognito-auth-password-initialize-new" class="cognito-auth-password-initialize-new" size="40em" placeholder="Enter new password">
-              <label for="password-initialize-new2">Re-enter new password:</label>
-              <input type="password" id="cognito-auth-password-initialize-new2" class="cognito-auth-password-initialize-new2" size="40em" placeholder="Re-enter new password">
-              <!-- 改行するためにdivが必要 -->
-              <div>
-                <button class='button-primary cognito-auth-password-initialize-reset-btn'>Reset</button>
-                <button class='button-primary cognito-auth-password-initialize-btn'>Update Password</button>
-              </div>
-              <p class='cognito-auth-password-initialize-error-message'></p>
-            </form>
-          </div>
-        </div>
-        <!-- 共通部品 -->
-        <div id="cognito-auth-overlay" style="display: none;"></div>
-        <style>
-        /* common setting */
-        .cognito-auth-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            background-color: #fff;
-            overflow: hidden;
-            z-index: 1101;  /* 1100以上にしないとナビゲーションの後ろになる。 */
-        }
-        .cognito-auth-popup_inner {
-            padding: 20px;
-        }
-        #cognito-auth-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            opacity: 0.7;
-            z-index: 1100;  /* 1100以上にしないとナビゲーションの後ろになる。 */
-        }
-        </style>
-      </div>
+      <!-- AWS Cognito認証基盤用ポップアップの読み込み -->
+      <div id='cognito-auth-popups'></div>
     </div>
     <script>
       // $.ready(): ページが準備完了後に実施する処理を記述

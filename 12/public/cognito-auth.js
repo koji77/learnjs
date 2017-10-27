@@ -1,16 +1,56 @@
 'use strict';
+/*
+# 使用条件
+・次のJavascriptライブラリまたはSDKを読み込み済であること。(順番も重要)
+1. jquery-2.1.4.min.js
+2. platform.js(async defer指定、google認証を利用する場合のみ)
+3. aws-cognito-sdk.min.js
+4. amazon-cognito-identity.min.js
+5. vendor.js
+6. amazon-cognito.min.js
+7. EventEmitter.min.js
+8. cognito-auth-params.js
+
+・HTMLファイルのBodyに次の要素を追加する。
+<div id='cognito-auth-popups'></div>
+
+・ページが準備完了後に「ognitoAuth.appOnReady)」を実行する様、HTMLファイルに記述する。
+$(window).ready(cognitoAuth.appOnReady);
+
+・認証後のみ実行する処理は次のように  cognitoAuth.identityオブジェクトの「done」または「then」コールバック内に記述する。
+  cognitoAuth.identity.done(function(identity) {
+    ...
+  }
+
+  cognitoAuth.identity.then(function(identity) {
+    ...
+  }
+
+・サインイン、サインアウトイベントハンドラは、cognitoAuth.signinEventEmitter.オブジェクトの「on」メソッドのコールバック内に記述する。
+・「signinState'」イベントの引数はBoolean型
+  cognitoAuth.signinEventEmitter.on('signinState', signinState => {
+    if (signinState) {
+      ...
+    } else {
+      ...
+    }
+  }
+
+・minifyエンジン
+<https://www.minifier.org/>
+*/
 // 名前空間の定義
 var cognitoAuth = {
-  region: 'ap-northeast-1',
-  IdentityPoolId: 'ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9',
-  userPoolId: 'ap-northeast-1_AqB95iyEm',
-  clientId: '62kbk9vh4a9ukhg43rdt78cso4',
-  expirationTime: 7776000000
 }
 
 cognitoAuth.signinEventEmitter = new EventEmitter();
 cognitoAuth.identity = new $.Deferred();
 cognitoAuth.isSignined = false;
+
+// HTMLの追加を即時実行
+$(function(){
+  $("#cognito-auth-popups").load('./cognito-auth.html');
+});
 
 // サインアップ画面用クリックハンドラ
 cognitoAuth.openSignupPopup = function() {
@@ -124,7 +164,7 @@ cognitoAuth.activation = function(username) {
       return false;
     }
     cognitoAuth.closeActivationPopup();
-    // cognitoAuth.openSigninPopup();
+    cognitoAuth.openSigninPopup();
   });
   return false;
 }
@@ -196,7 +236,7 @@ cognitoAuth.signin = function() {
             cognitoAuth.isSignined = true;
             cognitoAuth.signinEventEmitter.emit('signinState', true);
             var edt = new Date().getTime();
-            if (isNaN(lastUpdateTime) || edt - lastUpdateTime > cognitoAuth.expirationTime) {
+            if (isNaN(lastUpdateTime) || edt - lastUpdateTime > cognitoAuthParams.expirationTime) {
               // 有効期限切れフラグを有効化(パスワード更新画面表示時にブラウザ更新されたら強制サインアウトするため)
               localStorage.setItem("Expiration", "true");
               // パスワード更新画面へ
@@ -450,21 +490,21 @@ cognitoAuth.toText = function(code) {
 
 cognitoAuth.getUserPool = function() {
   AWS.config.update({
-    region: cognitoAuth.region,
+    region: cognitoAuthParams.region,
     credentials: new AWS.CognitoIdentityCredentials({
-      region: cognitoAuth.region,
-      IdentityPoolId: cognitoAuth.IdentityPoolId
+      region: cognitoAuthParams.region,
+      IdentityPoolId: cognitoAuthParams.IdentityPoolId
     })
   });
 
-  AWSCognito.config.region = cognitoAuth.region,
+  AWSCognito.config.region = cognitoAuthParams.region,
   AWSCognito.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: cognitoAuth.IdentityPoolId
+    IdentityPoolId: cognitoAuthParams.IdentityPoolId
   });
 
   var poolData = {
-    UserPoolId: cognitoAuth.userPoolId,
-    ClientId: cognitoAuth.clientId
+    UserPoolId: cognitoAuthParams.userPoolId,
+    ClientId: cognitoAuthParams.clientId
   };
 
   return new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
@@ -513,12 +553,12 @@ cognitoAuth.getUserInfoFromSession = function() {
 }
 
 cognitoAuth.refreshAWSConfig = function(id_token, email) {
-  var loginTo = 'cognito-idp.' + cognitoAuth.region + '.amazonaws.com/' + cognitoAuth.userPoolId;
+  var loginTo = 'cognito-idp.' + cognitoAuthParams.region + '.amazonaws.com/' + cognitoAuthParams.userPoolId;
   AWS.config.update({
-    region: cognitoAuth.region,
+    region: cognitoAuthParams.region,
     credentials: new AWS.CognitoIdentityCredentials({
-      region: cognitoAuth.region,
-      IdentityPoolId: cognitoAuth.IdentityPoolId,
+      region: cognitoAuthParams.region,
+      IdentityPoolId: cognitoAuthParams.IdentityPoolId,
       Logins: {
         [loginTo]: id_token
       }
@@ -581,10 +621,10 @@ function googleSignIn(googleUser) {
   // AWS認証情報をリクエスト
   var id_token = googleUser.getAuthResponse().id_token;
   AWS.config.update({
-    region: cognitoAuth.region,
+    region: cognitoAuthParams.region,
     credentials: new AWS.CognitoIdentityCredentials({
-      region: cognitoAuth.region,
-      IdentityPoolId: cognitoAuth.IdentityPoolId,
+      region: cognitoAuthParams.region,
+      IdentityPoolId: cognitoAuthParams.IdentityPoolId,
       Logins: {
         'accounts.google.com': id_token
       }
