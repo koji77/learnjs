@@ -1,0 +1,9 @@
+{
+  "IdentityPoolId": "ap-northeast-1:54fd1dbc-e565-463b-840c-e9627fa377f9",
+  "AllowUnauthenticatedIdentities": false,
+  "SupportedLoginProviders": {
+    "accounts.google.com":
+      "408780287249-r9u9stulbrtcjsl5ktoufpd0isr0tr5r.apps.googleusercontent.com"
+  },
+  "IdentityPoolName": "fxss-spa"
+}

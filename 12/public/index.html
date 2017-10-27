@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name="google-signin-client_id" content="408780287249-r9u9stulbrtcjsl5ktoufpd0isr0tr5r.apps.googleusercontent.com" />
+    <title>Learn JS!</title>
+    <!-- Google Fonts経由でSleletonのデフォルトフォントである「Raleway」を組み込む -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <!-- 全てのCSSをリセットする。すべてのブラウザでベースのスタイルを同じにする。 -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css'>
+    <!-- skeleton: Responsive CSS Boilerplate(雛形)、グリットシステム、スタイルなどを提供 -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css'>
+    <style type="text/css" media="all">
+      body { margin-top: 60px; }
+      /* テンプレートを非表示にする。 */
+      .templates { display: none;}
+      .inline-list {
+        margin-bottom: 0px;  /* skeketon reset */
+      }
+      .inline-list li {
+        display: inline;
+        margin: 0 20px 0 0;
+      }
+      .fixed-top {
+        position: fixed;
+        top: 0px;
+        z-index: 1024;
+      }
+      /* user-selectプロパティでユーザによるナビゲーションバーの選択を防止 */
+      .no-select{
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+      }
+      .hover-links a { text-decoration: none; }
+      .hover-links a:hover { text-decoration: underline; }  /* 要素名とhoverの間はスペースなし */
+      .nav-container {
+        padding-left: 40px;
+        background: #666;
+      }
+      .nav-container a { color: white; }
+      .text-lg {
+        font-size: 32px;
+      }
+      .navbar-padding {
+        padding-top: 7px;
+        display: inline-block;
+      }
+      .navbar-padding-link {
+        padding-top: 20px;
+        display: inline-block;
+      }
+    </style>
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Amazon Cognito AWS SDK、User Poolの利用に必要。vendor.jsより前に宣言する必要あり。 -->
+    <!-- ダウンロード元: https://github.com/aws/amazon-cognito-identity-js/ -->
+    <script src='./aws-cognito-sdk.min.js'></script>
+    <script src='./amazon-cognito-identity.min.js'></script>
+    <!-- CDN経由では利用できないライブラリが含まれる。Javascript用のAWS SDKも含まれる。 -->
+    <script src='./vendor.js'></script>
+    <!-- AWSCognitoクラスおよびUser Poolの利用に必要。vendor.jsより後に宣言する必要あり。 -->
+    <!-- ダウンロード元: https://github.com/aws/amazon-cognito-js -->
+    <script src='./amazon-cognito.min.js'></script>
+    <!-- EventEmitterの利用に必要 -->
+    <!-- ダウンロード元: https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/5.1.0/EventEmitter.min.js/ -->
+    <script src='./EventEmitter.min.js'></script>
+    <script src='./cognito-auth.js'></script>
+    <script src='./app.js'></script>
+  </head>
+  <body>
+    <!-- markup要素に含まれるマークアップがテストライナーのページのbodyに自動的に追加される。(SpecHelper.js) -->
+    <div class='markup'>
+      <div class='nav-container no-select fixed-top u-full-width'>
+        <!-- sixクラスとcolumnsクラスでナビゲーションバーの左半分に配置する。(6/12) -->
+        <ul class='inline-list hover-links nav-list four columns'>
+          <li><a class='text-lg' href='#'>LearnJS</a></li>
+          <li><a href='#problem-1'>Start</a></li>
+          <!-- <li><a href='#signup'>Sign up</a></li> -->
+        </ul>
+
+        <ul class='inline-list hover-links three columns'>
+          <div class='u-pull-right navbar-padding-link'>
+            <li><a href='#cognito-auth-signin-popup' class='cognito-auth-signin-open'>Sign in</a></li>
+            <li><a href='#cognito-auth-signup-popup' class='cognito-auth-signup-open'>Sign up</a></li>
+          </div>
+        </ul>
+
+        <div class='four columns signin-bar'>
+          <span class='navbar-padding u-pull-right'>
+            <span class='g-signin2' data-onsuccess='googleSignIn'></span>
+          </span>
+        </div>
+      </div>
+      <!-- Viewのマークアップを保持する要素 -->
+      <!-- SPAではルータが新しいViewを追加すると、View Countainer内のマークアップを全て置き換える。 -->
+      <div class='container view-container'>
+        <!-- デフォルトのViewを記述 -->
+      </div>
+      <!-- テンプレート置き場 -->
+      <div class='templates'>
+        <div class='landing-view'>
+          <div class='row'>
+            <div class='one-half column'>
+              <h3>Learn Javascript, one puzzle at a time</h3>
+              <a href='#problem-1' class='button button-primary'>Start Now!</a>
+            </div>
+            <div class='one-half column'>
+              <img src='/images/HeroImage.jpg'/>
+            </div>
+          </div>
+        </div>
+        <div class='problem-view'>
+          <h3 class='title'></h3>
+          <p data-name='description'></p>
+          <pre><code data-name='code'></code></pre>
+          <form>
+            <textarea class='u-full-width answer'></textarea>
+            <div>
+              <button class='button-primary check-btn'>Check Answer</button>
+              <p class='result'></p>
+            </div>
+          </form>
+        </div>
+        <div class='profile-view'>
+          <h3>Your Profile</h3>
+          <div class='email'></div>
+        </div>
+        <div class='profile-link navbar-padding'>
+          <a href='#profile'></a>
+        </div>
+        <div class='correct-flash'>
+          <span>Correct!</span> <a>Next Problem</a>
+        </div>
+        <li class='skip-btn'>
+          <a> Skip this problem</a>
+        </li>
+      </div>
+      <!-- ポップアップ置き場 -->
+      <div class='cognito-auth-popups'>
+        <!-- サインアップ画面 -->
+        <div id="cognito-auth-signup-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Sign up</h3>
+            <form>
+              <label for="cognito-auth-signup-name">User name:</label>
+              <input type="text" id="cognito-auth-signup-name" class="cognito-auth-signup-name" size="40em" placeholder="Pick a user name">
+              <label for="cognito-auth-signup-email">E-mail:</label>
+              <input type="text" id="cognito-auth-signup-email" class="cognito-auth-signup-email" size="40em" placeholder="you@example.com">
+              <label for="cognito-auth-signup-passwd">Password:</label>
+              <input type="password" id="cognito-auth-signup-passwd" class="cognito-auth-signup-passwd" size="40em" placeholder="Create a password">
+              <label for="cognito-auth-signup-passwd2">Re-enter the password:</label>
+              <input type="password" id="cognito-auth-signup-passwd2" class="cognito-auth-signup-passwd2" size="40em" placeholder="Re-enter the password">
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-signup-btn'>Sign up</button>
+                <button class='button-primary cognito-auth-signup-reset-btn'>Reset</button>
+                <button class='button-primary cognito-auth-close-btn'>Close</button>
+              </div>
+              <p class='cognito-auth-signup-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- アクテベーション画面 -->
+        <div id="cognito-auth-activation-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Activation</h3>
+            <form>
+              <label for="cognito-auth-activation-key">Activation Key:</label>
+              <input type="text" id="cognito-auth-activation-key" class="cognito-auth-activation-key" size="40em" placeholder="Enter a activation key">
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-activation-btn'>Activate</button>
+              </div>
+              <p class='cognito-auth-activation-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- サインイン画面 -->
+        <div id="cognito-auth-signin-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Sign in</h3>
+            <form>
+              <label for="cognito-auth-signin-name">User name:</label>
+              <input type="text" id="cognito-auth-signin-name" class="cognito-auth-signin-name" size="40em">
+              <label for="cognito-auth-signin-passwd">Password:</label>
+              <input type="password" id="cognito-auth-signin-passwd" class="cognito-auth-signin-passwd" size="40em">
+              <p><a href='#cognito-auth-password-reset-popup' class='cognito-auth-password-reset-open'>Forgot password ?</a></p>
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-signin-btn'>Sign in</button>
+                <button class='button-primary cognito-auth-close-btn'>Close</button>
+              </div>
+              <p class='cognito-auth-signin-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- パスワード更新画面 -->
+        <div id="cognito-auth-password-update-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Password update</h3>
+            <form>
+              <label for="cognito-auth-password-update-current">Current password:</label>
+              <input type="password" id="cognito-auth-password-update-current" class="cognito-auth-password-update-current" size="40em" placeholder="Enter current password">
+              <label for="cognito-auth-password-update-new">New password:</label>
+              <input type="password" id="cognito-auth-password-update-new" class="cognito-auth-password-update-new" size="40em" placeholder="Enter new password">
+              <label for="cognito-auth-password-update-new2">ReEntry new password:</label>
+              <input type="password" id="cognito-auth-password-update-new2" class="cognito-auth-password-update-new2" size="40em" placeholder="ReEnter new password">
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-password-update-reset-btn'>Reset</button>
+                <button class='button-primary cognito-auth-password-update-btn'>Update Password</button>
+              </div>
+              <p class='cognito-auth-password-update-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- パスワードリセット要求画面 -->
+        <div id="cognito-auth-password-reset-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Password reset</h3>
+            <form>
+              <label for="cognito-auth-password-reset-name">User name:</label>
+              <input type="text" id="cognito-auth-password-reset-name" class="cognito-auth-password-reset-name" size="40em">
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-password-reset-btn'>Send Password reset mail</button>
+                <button class='button-primary cognito-auth-close-btn'>Close</button>
+              </div>
+              <p class='cognito-auth-password-reset-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- パスワード忘れ画面 -->
+        <div id="cognito-auth-password-initialize-popup" class="cognito-auth-popup" style="margin-top: -176.5px; margin-left: -300px; display: none;">
+          <div class="cognito-auth-popup_inner">
+            <h3>Password initialization</h3>
+            <form>
+              <label for="cognito-auth-password-initialize-verification-code">Verification code:</label>
+              <input type="text" id="cognito-auth-password-initialize-verification-code" class="cognito-auth-password-initialize-verification-code" size="40em" placeholder="Enter your verification code">
+              <label for="cognito-auth-password-initialize-new">New password:</label>
+              <input type="password" id="cognito-auth-password-initialize-new" class="cognito-auth-password-initialize-new" size="40em" placeholder="Enter new password">
+              <label for="password-initialize-new2">Re-enter new password:</label>
+              <input type="password" id="cognito-auth-password-initialize-new2" class="cognito-auth-password-initialize-new2" size="40em" placeholder="Re-enter new password">
+              <!-- 改行するためにdivが必要 -->
+              <div>
+                <button class='button-primary cognito-auth-password-initialize-reset-btn'>Reset</button>
+                <button class='button-primary cognito-auth-password-initialize-btn'>Update Password</button>
+              </div>
+              <p class='cognito-auth-password-initialize-error-message'></p>
+            </form>
+          </div>
+        </div>
+        <!-- 共通部品 -->
+        <div id="cognito-auth-overlay" style="display: none;"></div>
+        <style>
+        /* common setting */
+        .cognito-auth-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            background-color: #fff;
+            overflow: hidden;
+            z-index: 1101;  /* 1100以上にしないとナビゲーションの後ろになる。 */
+        }
+        .cognito-auth-popup_inner {
+            padding: 20px;
+        }
+        #cognito-auth-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 0.7;
+            z-index: 1100;  /* 1100以上にしないとナビゲーションの後ろになる。 */
+        }
+        </style>
+      </div>
+    </div>
+    <script>
+      // $.ready(): ページが準備完了後に実施する処理を記述
+      $(window).ready(cognitoAuth.appOnReady);
+      $(window).ready(learnjs.appOnReady);
+    </script>
+  </body>
+</html>

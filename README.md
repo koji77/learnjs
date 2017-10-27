@@ -10,6 +10,14 @@ cd learnjs
 ./sspa
 ```
 
+## 作成したSPA
+[作成したSPA](http://fxss-spa-test.s3-website-ap-northeast-1.amazonaws.com)
+
+## API GatewayにデプロイしたWeb APIへのアクセス
+``` bash
+curl -d '{"problemNumber": 1}' https://en2tnd3l59.execute-api.ap-northeast-1.amazonaws.com/test/popularanswers
+```
+
 ## Change Log
 
 ### Beta 3 Changes
